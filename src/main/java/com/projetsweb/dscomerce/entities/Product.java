@@ -1,0 +1,98 @@
+package com.projetsweb.dscomerce.entities;
+
+import com.projetsweb.dscomerce.entities.compost.OrderItem;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "tb_product")
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    private String imgUrl;
+
+    private Double price;
+
+    @ManyToMany()
+    @JoinTable(name = "tb_product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
+
+    public Product(){}
+
+    public Product(Long id, String name, String description, String imgUrl, Double price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imgUrl = imgUrl;
+        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public List<Product> getProducts() {
+        return items.stream().map(x -> x.getProduct()).toList();
+    }
+}

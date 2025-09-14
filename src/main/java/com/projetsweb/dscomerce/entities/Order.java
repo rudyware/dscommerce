@@ -1,9 +1,13 @@
 package com.projetsweb.dscomerce.entities;
 
+import com.projetsweb.dscomerce.entities.compost.OrderItem;
 import com.projetsweb.dscomerce.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -15,18 +19,24 @@ public class Order {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
-    private OrderStatus orderStatus;
+    private OrderStatus status;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
     private User client;
 
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+
     public Order() {}
 
-    public Order(Long id, Instant moment, OrderStatus orderStatus) {
+    public Order(Long id, Instant moment, OrderStatus status) {
         this.id = id;
         this.moment = moment;
-        this.orderStatus = orderStatus;
+        this.status = status;
     }
 
     public Long getId() {
@@ -45,11 +55,35 @@ public class Order {
         this.moment = moment;
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public User getClient() {
+        return client;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public List<Product> getProducts() {
+        return items.stream().map(x -> x.getProduct()).toList();
     }
 }
