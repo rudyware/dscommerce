@@ -4,6 +4,7 @@ import com.projetsweb.dscomerce.dtos.ProductDTO;
 import com.projetsweb.dscomerce.entities.Product;
 import com.projetsweb.dscomerce.repositories.ProductRepository;
 import com.projetsweb.dscomerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,12 +35,12 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
       return  ResponseEntity.ok(productService.insert(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id,@Valid @RequestBody ProductDTO dto) {
         return ResponseEntity.ok(productService.update(id, dto));
     }
 
