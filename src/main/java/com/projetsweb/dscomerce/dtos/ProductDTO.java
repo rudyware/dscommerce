@@ -10,7 +10,7 @@ public class ProductDTO {
 
     private Long id;
     @NotBlank(message = "Campo requerido.")
-    @Size(min = 3, max = 25, message = "O tamanho não deve ser inferior a 3 nem Superior a 25")
+    @Size(min = 3, max = 25, message = "O nome não deve ser inferior a 3 nem Superior a 25")
     private String name;
     private String description;
     private String imgUrl;
